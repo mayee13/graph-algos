@@ -1,0 +1,19 @@
+.main-layout {
+    display: flex;
+    flex-direction: row; /* horizontal layout */
+    gap: 1rem;           /* optional spacing between items */
+    /* Optional: control wrapping */
+    flex-wrap: nowrap;   /* items won't wrap to next line */
+    max-width: 100vw;
+    justify-content: center; /* centers horizontally */
+    align-items: stretch; /* forces children to match height */
+    padding: 1rem;       /* optional padding around the layout */
+  }
+
+  .item {
+    flex: 1;             /* optional: lets them grow evenly */
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 10px;
+  }
+
