@@ -1,16 +1,18 @@
 import { useState } from "react";
 import './GraphAlgos.css';
-import { useNavigate } from "react-router-dom";
 
 export default function GraphAlgos({ 
     onBackClick,
-    nodes 
+    nodes,
+    runAlgorithm 
 }: { 
     onBackClick: () => void 
     nodes: { id: string }[];
+    runAlgorithm: (algorithm: string, start: string) => void;
 }) {
   const [selectedOption, setSelectedOption] = useState("simple");
-  const navigate = useNavigate();
+  const [startNode, setStartNode] = useState(nodes[0]?.id ?? '');
+  // const navigate = useNavigate();
   const renderSelectedComponent = () => {
     switch (selectedOption) {
       case "simple":
@@ -48,9 +50,9 @@ export default function GraphAlgos({
       {/* Start Node Selector */}
       <div>
         <label htmlFor="startNode">Start Node</label>
-        <select name="startNode" id="startNode">
+        <select name="startNode" id="startNode" value={startNode} onChange={(e) => setStartNode(e.target.value)}>
         {nodes.map((node) => (
-              <option key={node.id} value={node.id}>
+            <option key={node.id} value={node.id}>
             {node.id}
             </option>
         ))}
@@ -70,11 +72,11 @@ export default function GraphAlgos({
       <div>
         <div>
             <label htmlFor="BFS">Breadth First Search</label>
-            <button className="button-17" id="BFS">Run</button>
+            <button className="button-17" id="BFS" onClick={() =>runAlgorithm('BFS', startNode)}>Run</button>
         </div>
         <div>
             <label htmlFor="DFS">Depth First Search</label>
-            <button className="button-17" id="DFS">Run</button>
+            <button className="button-17" id="DFS" onClick={() =>runAlgorithm('DFS', startNode)}>Run</button>
         </div>
       </div>
     );

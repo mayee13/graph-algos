@@ -8,10 +8,14 @@ export default function GraphCanvas({
   nodes,
   links,
   options,
+  visitedNodes,
+  visitedEdges
 }: {
   nodes: Node[];
   links: Link[];
   options: { directed: boolean; weighted: boolean };
+  visitedNodes: string[];
+  visitedEdges: Link[];
 }) {
 
   // Reference to the SVG element
@@ -170,6 +174,61 @@ export default function GraphCanvas({
         });
     }
   }, [nodes, links, options]);
+
+  useEffect(() => {
+    const svg = d3.select(svgRef.current);
+    const nodeSelection = svg.selectAll<SVGCircleElement, Node>('circle');
+    const linkSelection = svg.selectAll<SVGLineElement, Link>('line');
+    if (visitedNodes.length === 0) {
+      setTimeout(() => {
+        nodeSelection
+          .transition()
+          .duration(300)
+          .attr('fill', '#6c2bd9'); // Reset to purple
+        linkSelection
+          .transition()
+          .duration(300)
+          .attr('stroke', '#aaa'); // Reset links to gray
+      }, 50);
+      return;
+    }
+  
+    visitedNodes.forEach((nodeId, i) => {
+  
+      setTimeout(() => {
+        // 1. Highlight current node in red
+        nodeSelection
+          .filter(d => d.id === nodeId)
+          .transition()
+          .duration(300)
+          .attr('fill', '#e74c3c'); // red
+  
+        // 2. Highlight the edge from previous node in magenta
+        if (i > 0) {
+          const prev = visitedEdges[i - 1].source;
+          const curr = visitedEdges[i-1].target;
+
+          linkSelection
+            .filter(d =>
+              (d.source as Node).id === prev && (d.target as Node).id === curr ||
+              (d.source as Node).id === curr && (d.target as Node).id === prev
+            )
+            .transition()
+            .duration(300)
+            .attr('stroke', '#ff00ff'); // magenta
+        }
+  
+        // 3. After another delay, mark node as visited (orange)
+        setTimeout(() => {
+          nodeSelection
+            .filter(d => d.id === nodeId)
+            .transition()
+            .duration(300)
+            .attr('fill', '#f39c12'); // orange
+        }, 400); // red visible for 400ms before switching
+      }, i * 800);
+    });
+  }, [visitedNodes]);
 
   return (
     <div className="graph-canvas-container">

@@ -5,7 +5,9 @@ import GraphControls from '../components/GraphControls';
 import GraphAlgos from '../components/GraphAlgos';
 import './MainLayout.css';
 import { Node, Link } from '../types/graph';
-
+import { Graph, buildGraph } from '../algorithm/graphBuild';
+import { bfs } from '../algorithm/BFS';
+import { dfs } from '../algorithm/DFS';
 
 export default function MainLayout() {
   // Initial state shows graph controls
@@ -24,6 +26,11 @@ export default function MainLayout() {
     directed: false,
     weighted: false,
   });
+
+  // Set order of visited nodes for algorithms
+  const [visitedNodes, setVisitedNodes] = useState<string[]>([]);
+
+  const [visitedEdges, setVisitedEdges] = useState<Link[]>([]);
 
   // GraphControls: Function to set the number of nodes and delete any 
   // links that reference non-existent nodes
@@ -52,6 +59,37 @@ export default function MainLayout() {
     setLinks((prev) => [...prev, newEdge]);
   }
 
+  const runAlgorithm = (
+    algorithm: string,
+    start: string,
+  ) => {
+    const graph : Graph = buildGraph(nodes.map((node) => node.id), links, options.directed);
+    let visitedOrder: {nodeOrder: string[], edgeOrder: Link[]} = {nodeOrder: [], edgeOrder: []};
+    setVisitedNodes([]); // Reset visited nodes before running algorithm
+    setTimeout(() => {
+      switch (algorithm) {
+        case 'BFS':
+          visitedOrder = bfs(graph, start);
+          break;
+        case 'DFS':
+          visitedOrder = dfs(graph, start);
+          break;
+        default:
+          console.error('Unknown algorithm:', algorithm);
+          return;
+      }      
+      setVisitedNodes(visitedOrder.nodeOrder);
+      setVisitedEdges(visitedOrder.edgeOrder);
+    }, 1000);
+    setVisitedNodes(visitedOrder.nodeOrder);
+    setVisitedEdges(visitedOrder.edgeOrder);
+  }
+
+  const onBackClick = () => {
+    setShowAlgos(false);
+    setVisitedNodes([]); // Reset visited nodes when going back
+  }
+
   return (
     <div>
       <Header />
@@ -59,8 +97,10 @@ export default function MainLayout() {
         <div className="item">
           {showAlgos ? (
             <GraphAlgos 
-            onBackClick={() => setShowAlgos(false)}
-            nodes={nodes}/>
+            onBackClick={onBackClick}
+            nodes={nodes}
+            runAlgorithm={runAlgorithm}
+            />
           ) : (
             <GraphControls 
             onRunClick={() => setShowAlgos(true)} 
@@ -73,7 +113,7 @@ export default function MainLayout() {
           )}
         </div>
       <div className="item">
-          <GraphCanvas nodes={nodes} links={links} options={options}/>
+          <GraphCanvas nodes={nodes} links={links} options={options} visitedNodes={visitedNodes} visitedEdges={visitedEdges}/>
       </div>
   </div>
 
