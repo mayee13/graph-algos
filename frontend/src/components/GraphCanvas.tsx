@@ -179,7 +179,7 @@ export default function GraphCanvas({
     const svg = d3.select(svgRef.current);
     const nodeSelection = svg.selectAll<SVGCircleElement, Node>('circle');
     const linkSelection = svg.selectAll<SVGLineElement, Link>('line');
-    if (visitedNodes.length === 0) {
+    if (visitedNodes.length === 0 && visitedEdges.length === 0) {
       setTimeout(() => {
         nodeSelection
           .transition()
@@ -192,10 +192,39 @@ export default function GraphCanvas({
       }, 50);
       return;
     }
+
+    if (visitedNodes.length === 0 && visitedEdges.length > 0) {
+      visitedEdges.forEach((edge, i) => {
+        setTimeout(() => {
+          linkSelection
+            .filter(d =>
+              (((d.source as Node).id === edge.source) && ((d.target as Node).id === edge.target)) ||
+              (((d.source as Node).id === edge.target) && ((d.target as Node).id === edge.source))
+            )
+            .transition()
+            .duration(300)
+            .attr('stroke', '#ff00ff'); // magenta
+        }, i * 800);
+      });
+
+    }
   
     visitedNodes.forEach((nodeId, i) => {
   
       setTimeout(() => {
+        // If nodeId is '_', skip highlighting
+        if (nodeId === '_') {
+          setTimeout(() => {
+            nodeSelection
+              .transition()
+              .duration(300)
+              .attr('fill', '#6c2bd9'); // Reset to purple
+            linkSelection
+              .transition()
+              .duration(300)
+              .attr('stroke', '#aaa'); // Reset links to gray
+          }, 50);
+        } else {
         // 1. Highlight current node in red
         nodeSelection
           .filter(d => d.id === nodeId)
@@ -204,14 +233,14 @@ export default function GraphCanvas({
           .attr('fill', '#e74c3c'); // red
   
         // 2. Highlight the edge from previous node in magenta
-        if (i > 0) {
+        if (i > 0 && nodeId !== '_') {
           const prev = visitedEdges[i - 1].source;
           const curr = visitedEdges[i-1].target;
 
           linkSelection
             .filter(d =>
-              (d.source as Node).id === prev && (d.target as Node).id === curr ||
-              (d.source as Node).id === curr && (d.target as Node).id === prev
+              (((d.source as Node).id === prev) && ((d.target as Node).id === curr)) ||
+              (((d.source as Node).id === curr) && ((d.target as Node).id === prev))
             )
             .transition()
             .duration(300)
@@ -226,9 +255,10 @@ export default function GraphCanvas({
             .duration(300)
             .attr('fill', '#f39c12'); // orange
         }, 400); // red visible for 400ms before switching
+        }
       }, i * 800);
     });
-  }, [visitedNodes]);
+  }, [visitedNodes, visitedEdges]);
 
   return (
     <div className="graph-canvas-container">

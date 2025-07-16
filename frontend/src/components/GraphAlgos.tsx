@@ -4,11 +4,15 @@ import './GraphAlgos.css';
 export default function GraphAlgos({ 
     onBackClick,
     nodes,
-    runAlgorithm 
+    runAlgorithm,
+    options,
+    hasNegativeEdges 
 }: { 
     onBackClick: () => void 
     nodes: { id: string }[];
     runAlgorithm: (algorithm: string, start: string) => void;
+    options: { directed: boolean; weighted: boolean;  };
+    hasNegativeEdges: boolean;
 }) {
   const [selectedOption, setSelectedOption] = useState("simple");
   const [startNode, setStartNode] = useState(nodes[0]?.id ?? '');
@@ -87,11 +91,21 @@ export default function GraphAlgos({
       <div>
         <div>
             <label htmlFor="Dijkstra">Dijkstra</label>
-            <button className="button-17" id="Dijkstra">Run</button>
+            <button 
+                className="button-17" 
+                id="Dijkstra" 
+                onClick={() =>runAlgorithm('Dijkstra', startNode)} 
+                disabled={!options.weighted || hasNegativeEdges}>
+                    Run
+            </button>
         </div>
         <div>
             <label htmlFor="Bellman">Bellman Ford</label>
-            <button className="button-17" id="Bellman">Run</button>
+            <button 
+                className="button-17" 
+                id="Bellman" 
+                onClick={() =>runAlgorithm('Bellman', startNode)}
+                disabled={!options.weighted || !options.directed}>Run</button>
         </div>
       </div>
     );
@@ -102,11 +116,17 @@ export default function GraphAlgos({
       <div>
         <div>
             <label htmlFor="Prim">Prim's Algorithm</label>
-            <button className="button-17" id="Prim">Run</button>
+            <button 
+                className="button-17" 
+                id="Prim" onClick={() =>runAlgorithm('Prim', startNode)} 
+                disabled={!options.weighted || options.directed}>Run</button>
         </div>
         <div>
             <label htmlFor="Kruskal">Kruskal's Algorithm</label>
-            <button className="button-17" id="Kruskal">Run</button>
+            <button 
+                className="button-17" 
+                id="Kruskal" onClick={() =>runAlgorithm('Kruskal', startNode)}
+                disabled={!options.weighted || options.directed}>Run</button>
         </div>
       </div>
     );
@@ -117,7 +137,9 @@ export default function GraphAlgos({
       <div>
         <div>
             <label htmlFor="Topological">Topological Sort</label>
-            <button className="button-17" id="Topological">Run</button>
+            <button className="button-17" id="Topological">
+                Run
+            </button>
         </div>
         <div>
             <label htmlFor="Ford">Ford Fulkerson</label>

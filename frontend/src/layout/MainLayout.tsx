@@ -8,6 +8,10 @@ import { Node, Link } from '../types/graph';
 import { Graph, buildGraph } from '../algorithm/graphBuild';
 import { bfs } from '../algorithm/BFS';
 import { dfs } from '../algorithm/DFS';
+import { dijkstra } from '../algorithm/dijkstra';
+import { prim } from '../algorithm/prim';
+import { kruskal } from '../algorithm/kruskal';
+import { bellman } from '../algorithm/bellman';
 
 export default function MainLayout() {
   // Initial state shows graph controls
@@ -31,6 +35,8 @@ export default function MainLayout() {
   const [visitedNodes, setVisitedNodes] = useState<string[]>([]);
 
   const [visitedEdges, setVisitedEdges] = useState<Link[]>([]);
+
+  const [hasNegativeEdges, setHasNegativeEdges] = useState(false);
 
   // GraphControls: Function to set the number of nodes and delete any 
   // links that reference non-existent nodes
@@ -74,6 +80,18 @@ export default function MainLayout() {
         case 'DFS':
           visitedOrder = dfs(graph, start);
           break;
+        case 'Dijkstra':
+          visitedOrder = dijkstra(graph, start);
+          break;
+        case 'Prim':
+          visitedOrder = prim(graph, start);
+          break;
+        case 'Kruskal':
+          visitedOrder = kruskal(graph, start);
+          break;
+        case 'Bellman':
+          visitedOrder = bellman(graph, start);  
+          break; 
         default:
           console.error('Unknown algorithm:', algorithm);
           return;
@@ -100,6 +118,8 @@ export default function MainLayout() {
             onBackClick={onBackClick}
             nodes={nodes}
             runAlgorithm={runAlgorithm}
+            options={options}
+            hasNegativeEdges={hasNegativeEdges}
             />
           ) : (
             <GraphControls 
@@ -109,6 +129,7 @@ export default function MainLayout() {
             options={options}
             setOptions={setOptions}
             nodes={nodes}
+            setNegativeEdges={setHasNegativeEdges}
             />
           )}
         </div>

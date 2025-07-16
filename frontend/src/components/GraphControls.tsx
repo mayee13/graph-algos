@@ -2,14 +2,15 @@ import './GraphControls.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
-
+// TODO: add feature to generate a random graph after fixing the number of nodes (sparsity parameters?)
 export default function GraphControls({ 
   onRunClick,
   setNodeCount,
   addEdge,
   options,
   setOptions,
-  nodes  
+  nodes,
+  setNegativeEdges,  
 }: { 
   onRunClick: () => void 
   setNodeCount: (count: number) => void;
@@ -17,12 +18,13 @@ export default function GraphControls({
   options: { directed: boolean; weighted: boolean };
   setOptions: (opts: { directed: boolean; weighted: boolean }) => void;
   nodes: { id: string }[];
+  setNegativeEdges: (hasNegativeEdges: boolean) => void;
 }) {
     return (
         <div className="graph-controls-container">
           <CheckBoxElems options={options} setOptions={setOptions}/>
           <SliderElem setNodeCount={setNodeCount} nodeCount={nodes.length}/>
-          <AddEdge addEdge={addEdge} nodes={nodes} options={options}/>
+          <AddEdge addEdge={addEdge} nodes={nodes} options={options} setNegativeEdges={setNegativeEdges}/>
           <BottomButtons onRunClick={onRunClick}/>
         </div>
       );
@@ -55,7 +57,6 @@ function CheckBoxElems({ options, setOptions } : any) {
     )
 }
 
-// TODO: fix initial render state (always resets to 1)
 // Render a slider for the number of nodes
 function SliderElem({setNodeCount, nodeCount} : { 
   setNodeCount: (count: number) => void;
@@ -79,16 +80,17 @@ function SliderElem({setNodeCount, nodeCount} : {
     )
 }
 
-// TODO: fix options values, add labels to nodes
 // Render elements to add an edge between two nodes
 function AddEdge({
   addEdge,
   nodes,
   options,
+  setNegativeEdges,
 } : {
   addEdge: (start: string, end: string, weight?: number) => void;
   nodes: { id: string }[];
   options: { directed: boolean; weighted: boolean };
+  setNegativeEdges: (hasNegativeEdges: boolean) => void;
 }) {
     const [startNode, setStartNode] = useState('');
     const [endNode, setEndNode] = useState('');
@@ -113,20 +115,25 @@ function AddEdge({
             </option>
             ))}
           </select>
-            {options.weighted && (
-              <>
-                <label htmlFor="weight">Weight: </label>
+          <label htmlFor="weight">Weight: </label>
                 <input 
                   type="number" 
                   id="weight" 
                   value={weight}
                   name="weight" 
-                  min="1" 
-                  max="100"
-                  onChange={(e) => setWeight(Number(e.target.value))}>  
-                </input>
+                  onChange={(e) => {
+                    setWeight(Number(e.target.value))
+                    if (Number(e.target.value) < 0) {
+                      setNegativeEdges(true); 
+                    }
+                  }}
+                  disabled={!options.weighted}> 
+            </input>
+            {/* {options.weighted && (
+              <>
+                
               </>            
-            )}
+            )} */}
             <button className="button-17"
             onClick={() => {
               if ((startNode && endNode) && (startNode !== endNode)) {
