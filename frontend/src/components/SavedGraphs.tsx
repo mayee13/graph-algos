@@ -5,6 +5,6 @@ export default function() {
     return(<div>
         <h1>Saved Graphs</h1>
         <p>This feature is under development. Please check back later.</p>
-        <button onClick={() => navigate('/')}>Back to Editor</button>
+        <button onClick={() => navigate('/canvas')}>Back to Editor</button>
     </div>)
 }

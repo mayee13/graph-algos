@@ -8,6 +8,7 @@
     justify-content: center; /* centers horizontally */
     align-items: stretch; /* forces children to match height */
     padding: 1rem;       /* optional padding around the layout */
+    background-color: rgba(255, 255, 255, 0.633);
   }
 
   .item {
@@ -15,5 +16,6 @@
     border: 1px solid #ccc;
     padding: 1rem;
     border-radius: 10px;
+    background-color: white;
   }
 

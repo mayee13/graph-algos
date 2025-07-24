@@ -6,13 +6,15 @@ export default function GraphAlgos({
     nodes,
     runAlgorithm,
     options,
-    hasNegativeEdges 
+    hasNegativeEdges, 
+    clearColors 
 }: { 
     onBackClick: () => void 
     nodes: { id: string }[];
     runAlgorithm: (algorithm: string, start: string) => void;
     options: { directed: boolean; weighted: boolean;  };
     hasNegativeEdges: boolean;
+    clearColors: () => void;
 }) {
   const [selectedOption, setSelectedOption] = useState("simple");
   const [startNode, setStartNode] = useState(nodes[0]?.id ?? '');
@@ -66,6 +68,7 @@ export default function GraphAlgos({
       {renderSelectedComponent()}
       <div>
         <button className="button-17" onClick={onBackClick}>Back to Editor</button>
+        <button className="button-17" onClick={clearColors}>Clear</button>
       </div>
     </div>
   );

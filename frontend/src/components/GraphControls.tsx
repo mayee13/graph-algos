@@ -161,6 +161,7 @@ function BottomButtons({ onRunClick }: { onRunClick: () => void }) {
         onClick={() => navigate('/savedgraphs')}
       >Load</button>
       </div>
+      {/* <div><button className="button-17" onClick={() => navigate('/')}>Back to Login</button></div> */}
     </div>
   )
 }

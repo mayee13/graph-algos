@@ -1,0 +1,34 @@
+/* Style the outermost container div */
+.container {
+    height: 100%;            /* full viewport height */
+    margin-top: 5rem ;
+    display: flex;            /* use flexbox */
+    flex-direction: column;   /* stack children vertically */
+    justify-content: center;  /* center vertically */
+    align-items: center;      /* center horizontally */
+    gap: 1rem;                /* spacing between elements */
+    font-family: "Optima", sans-serif;
+  }
+  
+  /* Optional: style each inner div to align items nicely */
+  .container > div {
+    width: 250px;             /* fixed width for form controls */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Label/input alignment */
+  .container label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    font-size: larger;
+  }
+  
+  /* Input styling */
+  .container input[type="text"] {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 1rem;
+  }

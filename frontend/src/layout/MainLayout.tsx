@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Header from '../components/Header';
 import GraphCanvas from '../components/GraphCanvas';
 import GraphControls from '../components/GraphControls';
 import GraphAlgos from '../components/GraphAlgos';
@@ -106,11 +105,16 @@ export default function MainLayout() {
   const onBackClick = () => {
     setShowAlgos(false);
     setVisitedNodes([]); // Reset visited nodes when going back
+    setVisitedEdges([]); // Reset visited edges when going back
+  }
+
+  const clearColors = () => { 
+    setVisitedNodes([]);
+    setVisitedEdges([]);
   }
 
   return (
     <div>
-      <Header />
       <div className="main-layout">
         <div className="item">
           {showAlgos ? (
@@ -120,6 +124,7 @@ export default function MainLayout() {
             runAlgorithm={runAlgorithm}
             options={options}
             hasNegativeEdges={hasNegativeEdges}
+            clearColors={clearColors}
             />
           ) : (
             <GraphControls 
@@ -133,12 +138,11 @@ export default function MainLayout() {
             />
           )}
         </div>
-      <div className="item">
-          <GraphCanvas nodes={nodes} links={links} options={options} visitedNodes={visitedNodes} visitedEdges={visitedEdges}/>
-      </div>
-  </div>
-
+        <div className="item">
+            <GraphCanvas nodes={nodes} links={links} options={options} visitedNodes={visitedNodes} visitedEdges={visitedEdges}/>
+        </div>
     </div>
+  </div>
   );
 }
 
