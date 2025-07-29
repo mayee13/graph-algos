@@ -1,12 +1,13 @@
   .header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
-    padding: 2.5rem 2.5rem;
-    background-color: #b4cfd58d;
-    color: white;
+    position: relative;
+    padding: 2rem 2rem;
+    background-color: #c4b4d58d;
+    color: rgb(63, 9, 95);
+    height: auto;
   }
-
   .header h1 {
     position: absolute;
     left: 50%;
@@ -18,13 +19,7 @@
   }
 
   /* Left: user info */
-  .user-info {
-    width: 150px; /* or use flex: 1 if you want it to grow */
-    color: rgba(28, 28, 28, 0.912);
-    font-weight: bold;
-    font-family: "Papyrus", cursive;
-    justify-self: start;
-  }
+  
   
   .nav-links {
     display: flex;
@@ -43,23 +38,13 @@
     text-decoration: underline;
   }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  padding: 2rem 2rem;
-  background-color: #b4cfd58d;
-  color: rgb(63, 9, 95);
-  height: auto;
-}
 
 /* Left: user info */
 .user-info {
   width: 300px; /* or use flex: 1 if you want it to grow */
-  color: rgba(28, 28, 28, 0.912);
+  color: rgb(63, 9, 95);
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-family: "Papyrus", cursive;
 }
 

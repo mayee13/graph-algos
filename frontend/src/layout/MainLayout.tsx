@@ -11,8 +11,26 @@ import { dijkstra } from '../algorithm/dijkstra';
 import { prim } from '../algorithm/prim';
 import { kruskal } from '../algorithm/kruskal';
 import { bellman } from '../algorithm/bellman';
+import { saveGraph } from '../api/graphs';
+import { useEffect } from 'react';
 
-export default function MainLayout() {
+export default function MainLayout({ 
+  user: username, 
+  graph: graphname, 
+  setGraphName, 
+  graphInfo: graphdata, 
+  options,
+  setOptions 
+}: { 
+  user: 
+  string, 
+  graph: string, 
+  setGraphName: (name: string) => void, 
+  graphInfo: Graph | null,
+  options: { directed: boolean; weighted: boolean },
+  setOptions: (options: { directed: boolean; weighted: boolean }) => void }) {
+
+  // const [graphName, setGraphName] = useState<string>('');
   // Initial state shows graph controls
   const [showAlgos, setShowAlgos] = useState(false);
 
@@ -21,14 +39,37 @@ export default function MainLayout() {
     {id: 'A'}
   ]);
 
+  useEffect(() => {
+    if (graphdata) {
+      const newNodes: Node[] = Array.from(graphdata.keys()).map((key) => ({
+        id: key
+      }));
+      setNodes(newNodes);
+    }
+  }, [graphdata]);
+
   // Links are empty initially
   const [links, setLinks] = useState<Link[]>([]);
+  useEffect(() => {
+    if (graphdata) {
+      const newLinks: Link[] = [];
+  
+      for (const [source, neighbors] of graphdata.entries()) {
+        for (const { node: target, weight } of neighbors) {
+          newLinks.push({ source, target, weight });
+        }
+      }
+  
+      setLinks(newLinks);
+    }
+  }, [graphdata]);
 
+  // TODO: save this information in the database
   // Options for the graph type
-  const [options, setOptions] = useState({
-    directed: false,
-    weighted: false,
-  });
+  // const [options, setOptions] = useState({
+  //   directed: false,
+  //   weighted: false,
+  // });
 
   // Set order of visited nodes for algorithms
   const [visitedNodes, setVisitedNodes] = useState<string[]>([]);
@@ -113,6 +154,21 @@ export default function MainLayout() {
     setVisitedEdges([]);
   }
 
+  const saveGraphToDB = async () => {
+    const graph : Graph = buildGraph(nodes.map((node) => node.id), links, options.directed);
+    if (username === "" || graphname === "") {
+      alert('Please login and provide a graph name before saving.');
+      return; 
+    }
+    try {
+      await saveGraph(username, graphname, graph, options.directed, options.weighted);
+      alert('Graph saved successfully!');
+    } catch (error) {
+      console.error('Error saving graph:', error);
+      alert('Failed to save graph. Please try again.');
+    }
+  }
+
   return (
     <div>
       <div className="main-layout">
@@ -135,6 +191,9 @@ export default function MainLayout() {
             setOptions={setOptions}
             nodes={nodes}
             setNegativeEdges={setHasNegativeEdges}
+            graphName={graphname}
+            setGraphName={setGraphName}
+            saveGraphToDB={saveGraphToDB}
             />
           )}
         </div>

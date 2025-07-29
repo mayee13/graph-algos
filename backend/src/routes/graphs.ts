@@ -6,7 +6,7 @@ import { Graph } from '../types/graph';
 const router = express.Router();
 
 router.post('/', (req, res) => {
-    const { username, name, data } = req.body;  
+    const { username, name, data, directed, weighted } = req.body;  
 
     if (!username || !data) {
         return res.status(400).json({ error: 'Username and data are required' });
@@ -21,7 +21,9 @@ router.post('/', (req, res) => {
         id: graphs.length + 1,
         username: user.username,
         name: name || `Graph ${graphs.length + 1}`,
-        data
+        data,
+        directed: directed,
+        weighted: weighted
     };
 
     graphs.push(newGraph);

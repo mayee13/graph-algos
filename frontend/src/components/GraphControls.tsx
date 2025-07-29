@@ -10,7 +10,10 @@ export default function GraphControls({
   options,
   setOptions,
   nodes,
-  setNegativeEdges,  
+  setNegativeEdges,
+  graphName,
+  setGraphName, 
+  saveGraphToDB 
 }: { 
   onRunClick: () => void 
   setNodeCount: (count: number) => void;
@@ -19,13 +22,28 @@ export default function GraphControls({
   setOptions: (opts: { directed: boolean; weighted: boolean }) => void;
   nodes: { id: string }[];
   setNegativeEdges: (hasNegativeEdges: boolean) => void;
+  graphName: string;
+  setGraphName: (name: string) => void;
+  saveGraphToDB: () => void; 
 }) {
     return (
         <div className="graph-controls-container">
           <CheckBoxElems options={options} setOptions={setOptions}/>
           <SliderElem setNodeCount={setNodeCount} nodeCount={nodes.length}/>
           <AddEdge addEdge={addEdge} nodes={nodes} options={options} setNegativeEdges={setNegativeEdges}/>
-          <BottomButtons onRunClick={onRunClick}/>
+          <BottomButtons onRunClick={onRunClick} saveGraphToDB={saveGraphToDB}/>
+          <div>
+            <label htmlFor="graphname">Graph Name:</label>
+            <input 
+                type="text" 
+                id="graphname" 
+                name="graphname" 
+                value={graphName} 
+                onChange={(e) => setGraphName(e.target.value)}
+                required>
+            </input>
+          </div>
+          
         </div>
       );
 }
@@ -148,14 +166,14 @@ function AddEdge({
 }
 
 // Render buttons for various actions
-function BottomButtons({ onRunClick }: { onRunClick: () => void }) {
+function BottomButtons({ onRunClick, saveGraphToDB }: { onRunClick: () => void, saveGraphToDB: () => void }) {
   const navigate = useNavigate();
   return (
     <div>
       <div>
         <button className="button-17">Generate</button>
         <button className="button-17" onClick={onRunClick}>Run </button>
-        <button className="button-17">Save</button>
+        <button className="button-17" onClick={saveGraphToDB}>Save</button>
         <button
         className="button-17"
         onClick={() => navigate('/savedgraphs')}

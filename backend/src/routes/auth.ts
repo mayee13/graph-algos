@@ -5,8 +5,6 @@ import { User } from '../types/user';
 const router = express.Router();
 
 router.post('/register', (req, res) => {
-    console.log('receiving registration request...');
-
     const { username } = req.body;
     if (!username) {
         return res.status(400).json({ error: 'Username is required' });
@@ -26,7 +24,6 @@ router.post('/register', (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-    console.log('receiving login request...');
     const { username } = req.body;
     if (!username) {
         return res.status(400).json({ error: 'Username is required' });
