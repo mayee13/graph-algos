@@ -1,5 +1,5 @@
 import './GraphControls.css';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 // TODO: add feature to generate a random graph after fixing the number of nodes (sparsity parameters?)
@@ -13,7 +13,8 @@ export default function GraphControls({
   setNegativeEdges,
   graphName,
   setGraphName, 
-  saveGraphToDB 
+  saveGraphToDB,
+  loadClick 
 }: { 
   onRunClick: () => void 
   setNodeCount: (count: number) => void;
@@ -25,25 +26,15 @@ export default function GraphControls({
   graphName: string;
   setGraphName: (name: string) => void;
   saveGraphToDB: () => void; 
+  loadClick: () => void;
 }) {
     return (
         <div className="graph-controls-container">
+          <GraphNameElem setGraphName={setGraphName} graphName={graphName}/>
           <CheckBoxElems options={options} setOptions={setOptions}/>
           <SliderElem setNodeCount={setNodeCount} nodeCount={nodes.length}/>
           <AddEdge addEdge={addEdge} nodes={nodes} options={options} setNegativeEdges={setNegativeEdges}/>
-          <BottomButtons onRunClick={onRunClick} saveGraphToDB={saveGraphToDB}/>
-          <div>
-            <label htmlFor="graphname">Graph Name:</label>
-            <input 
-                type="text" 
-                id="graphname" 
-                name="graphname" 
-                value={graphName} 
-                onChange={(e) => setGraphName(e.target.value)}
-                required>
-            </input>
-          </div>
-          
+          <BottomButtons onRunClick={onRunClick} saveGraphToDB={saveGraphToDB} loadClick={loadClick}/>
         </div>
       );
 }
@@ -166,8 +157,8 @@ function AddEdge({
 }
 
 // Render buttons for various actions
-function BottomButtons({ onRunClick, saveGraphToDB }: { onRunClick: () => void, saveGraphToDB: () => void }) {
-  const navigate = useNavigate();
+function BottomButtons({ onRunClick, saveGraphToDB, loadClick }: { 
+  onRunClick: () => void, saveGraphToDB: () => void, loadClick: () => void }) {
   return (
     <div>
       <div>
@@ -176,11 +167,31 @@ function BottomButtons({ onRunClick, saveGraphToDB }: { onRunClick: () => void, 
         <button className="button-17" onClick={saveGraphToDB}>Save</button>
         <button
         className="button-17"
-        onClick={() => navigate('/savedgraphs')}
+        onClick={loadClick}
       >Load</button>
       </div>
       {/* <div><button className="button-17" onClick={() => navigate('/')}>Back to Login</button></div> */}
     </div>
   )
+}
+
+function GraphNameElem({setGraphName, graphName} : {
+  setGraphName: (name: string) => void;
+  graphName: string;
+}) {
+  return (
+    <div className='graph-name-container'>
+      <label htmlFor="graphname" className='graph-label'>Graph Name:</label>
+      <input 
+        type="text" 
+        id="graphname" 
+        name="graphname" 
+        value={graphName} 
+        onChange={(e) => setGraphName(e.target.value)}
+        className='graph-input'
+        required>
+      </input>
+    </div>
+  );
 }
 

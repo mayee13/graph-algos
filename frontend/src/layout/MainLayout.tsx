@@ -13,6 +13,7 @@ import { kruskal } from '../algorithm/kruskal';
 import { bellman } from '../algorithm/bellman';
 import { saveGraph } from '../api/graphs';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function MainLayout({ 
   user: username, 
@@ -29,6 +30,7 @@ export default function MainLayout({
   graphInfo: Graph | null,
   options: { directed: boolean; weighted: boolean },
   setOptions: (options: { directed: boolean; weighted: boolean }) => void }) {
+  const navigate = useNavigate();
 
   // const [graphName, setGraphName] = useState<string>('');
   // Initial state shows graph controls
@@ -63,13 +65,6 @@ export default function MainLayout({
       setLinks(newLinks);
     }
   }, [graphdata]);
-
-  // TODO: save this information in the database
-  // Options for the graph type
-  // const [options, setOptions] = useState({
-  //   directed: false,
-  //   weighted: false,
-  // });
 
   // Set order of visited nodes for algorithms
   const [visitedNodes, setVisitedNodes] = useState<string[]>([]);
@@ -169,6 +164,15 @@ export default function MainLayout({
     }
   }
 
+  const loadClick = () => {
+    if (username === "") {
+      alert('Please login to load graphs.');
+      return; 
+    }
+    navigate('/savedgraphs'); 
+    
+  }
+
   return (
     <div>
       <div className="main-layout">
@@ -194,6 +198,7 @@ export default function MainLayout({
             graphName={graphname}
             setGraphName={setGraphName}
             saveGraphToDB={saveGraphToDB}
+            loadClick={loadClick}
             />
           )}
         </div>

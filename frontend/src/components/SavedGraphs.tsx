@@ -3,6 +3,7 @@ import { fetchGraphs } from '../api/graphs';
 import { useState, useEffect } from 'react';
 import { Graph } from '../algorithm/graphBuild';
 import { objectToGraph } from '../api/utils';
+import './SavedGraphs.css'
 
 interface BackendGraph {
     id: number;
@@ -47,19 +48,21 @@ setOptions: (options: { directed: boolean; weighted: boolean }) => void }) {
     }
   
     return (
-      <div>
+      <div className='saved-graphs-container'>
         <h1>Saved Graphs</h1>
-        <ul>
-            {userGraphs.map((graph) => (
-                <li key={graph.id}>
-                    <button onClick={() => handleGraphClick(graph)}>
-                        {graph.name || `Untitled Graph (${graph.id})`}
-                    </button>
-                </li>
-            ))}
-        </ul>
-  
-        <button onClick={handleBackClick}>Back to Editor</button>
+        <div className='graph-list-box'>
+            <ul className='graph-list'>
+                {userGraphs.map((graph) => (
+                    <li key={graph.id} className='graph-list-item'>
+                        <button onClick={() => handleGraphClick(graph)} className='button-17'>
+                            {graph.name || `Untitled Graph (${graph.id})`}
+                        </button>
+                    </li>
+                ))}
+            </ul>
+        </div>
+        
+        <button onClick={handleBackClick} className='button-17'>Go to Editor</button>
       </div>
     );
   }

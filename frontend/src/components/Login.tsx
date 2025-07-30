@@ -12,7 +12,7 @@ export default function Login({user, setUser} : {user: string, setUser: (usernam
           await loginUser(username);
           localStorage.setItem("username", username); // store logged-in user
           setUser(username); // update username state
-          navigate("/canvas"); // redirect to graph editor
+          navigate("/savedgraphs"); // redirect to graph editor
         } catch (err) {
           alert("Login failed. Try registering first.");
         }

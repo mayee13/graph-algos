@@ -32,3 +32,8 @@
     border: 1px solid #ccc;
     margin-bottom: 1rem;
   }
+
+  .container input:focus {
+    outline: none;
+    border: 2px solid #c89af0; /* purple border on focus */
+  }
