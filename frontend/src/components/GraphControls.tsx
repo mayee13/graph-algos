@@ -1,5 +1,4 @@
-import './GraphControls.css';
-// import { useNavigate } from 'react-router-dom';
+import './styles/GraphControls.css';
 import { useState } from 'react';
 
 // TODO: add feature to generate a random graph after fixing the number of nodes (sparsity parameters?)
@@ -138,11 +137,6 @@ function AddEdge({
                   }}
                   disabled={!options.weighted}> 
             </input>
-            {/* {options.weighted && (
-              <>
-                
-              </>            
-            )} */}
             <button className="button-17"
             onClick={() => {
               if ((startNode && endNode) && (startNode !== endNode)) {

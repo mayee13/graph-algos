@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { fetchGraphs } from '../api/graphs';
+import { fetchGraphs, deleteGraph } from '../api/graphs';
 import { useState, useEffect } from 'react';
 import { Graph } from '../algorithm/graphBuild';
 import { objectToGraph } from '../api/utils';
-import './SavedGraphs.css'
+import './styles/SavedGraphs.css'
 
 interface BackendGraph {
     id: number;
@@ -19,20 +19,23 @@ export default function SavedGraphs({username, setGraphName, setLoadedGraph, set
 setOptions: (options: { directed: boolean; weighted: boolean }) => void }) {
     const navigate = useNavigate();
     const [userGraphs, setUserGraphs] = useState<BackendGraph[]>([]);
-  
+    const [selected, setSelected] = useState<String>("");
+    const [selectedGraphId, setSelectedGraphId] = useState<number | null>(null);
+
     useEffect(() => {
-        async function load() {
-            try {
-                const graphs = await fetchGraphs(username);
-                setUserGraphs(graphs);
-            } catch (err) {
-                console.error('Failed to fetch graphs', err);
-            }
-        }
-        load(); 
+        loadGraphs();
     }, [username]);
 
-    function handleGraphClick(graph: BackendGraph) {
+    async function loadGraphs() {
+        try {
+            const graphs = await fetchGraphs(username);
+            setUserGraphs(graphs);
+        } catch (err) {
+            console.error('Failed to fetch graphs', err);
+        }
+    }
+
+    function handleOpen(graph: BackendGraph) {
         const graphMap = objectToGraph(graph.data);
         setLoadedGraph(graphMap); 
         setGraphName(graph.name);
@@ -40,10 +43,34 @@ setOptions: (options: { directed: boolean; weighted: boolean }) => void }) {
         navigate('/canvas'); // navigate to the canvas editor
     }
 
+    async function handleDelete(graph: BackendGraph) {
+        try {
+            // Call API to delete the graph
+            await deleteGraph(graph.id);
+            // Reload graphs after deletion
+            await loadGraphs();
+            setSelectedGraphId(null);
+            setSelected(""); // reset selected graph name
+        } catch (err) {
+            console.error('Failed to delete graph', err);
+        }
+    }
+
+    function handleGraphClick(graph: BackendGraph) {
+        if (selected === graph.name) {
+            setSelected(""); // reset selected graph name
+            setSelectedGraphId(null); // reset selected graph id
+        } else {
+            setSelected(graph.name); // set selected graph name
+            setSelectedGraphId(graph.id); // set selected graph id
+        }
+    }
+
     function handleBackClick() {
         setLoadedGraph(null); 
         setGraphName(''); 
         setOptions({ directed: false, weighted: false });
+        setSelected(''); // reset selected graph
         navigate('/canvas'); 
     }
   
@@ -57,6 +84,12 @@ setOptions: (options: { directed: boolean; weighted: boolean }) => void }) {
                         <button onClick={() => handleGraphClick(graph)} className='button-17'>
                             {graph.name || `Untitled Graph (${graph.id})`}
                         </button>
+                        {selectedGraphId === graph.id && (
+                                <div className='graph-action-buttons'>
+                                    <button className='button-17' onClick={() => handleOpen(graph)}>Open</button>
+                                    <button className='button-17 delete' onClick={() => handleDelete(graph)}>Delete</button>
+                                </div>
+                        )}
                     </li>
                 ))}
             </ul>

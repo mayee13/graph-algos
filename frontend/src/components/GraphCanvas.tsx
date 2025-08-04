@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
-import './GraphCanvas.css';
+import './styles/GraphCanvas.css';
 import { Node, Link } from '../types/graph';
 
 // This component renders a graph using D3.js

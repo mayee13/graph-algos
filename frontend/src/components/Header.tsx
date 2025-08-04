@@ -1,10 +1,21 @@
-import './Header.css';
+import './styles/Header.css';
 import { Link } from 'react-router-dom';
+import { Graph } from '../algorithm/graphBuild';
 
-export default function Header({username, setUsername} : {username: string, setUsername: (username: string) => void}) {
+export default function Header({
+  username, 
+  setUsername, 
+  setGraphName,
+  setLoadedGraph} : {
+    username: string, 
+    setUsername: (username: string) => void,
+    setGraphName: (name: string) => void,
+    setLoadedGraph: (graph: Graph | null) => void} ) {
 
   const handleLogout = () => {
     setUsername('');
+    setLoadedGraph(null);
+    setGraphName('');
   };
 
     return (

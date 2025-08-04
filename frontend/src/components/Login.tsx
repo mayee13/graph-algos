@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router"
 import { useState } from "react";
 import { loginUser, registerUser } from "../api/auth"; 
-import './Login.css'; 
+import './styles/Login.css'; 
 
-export default function Login({user, setUser} : {user: string, setUser: (username: string) => void}) { 
+export default function Login({setUser} : { setUser: (username: string) => void}) { 
     const navigate = useNavigate();
     const [username, setUsername] = useState("");
 

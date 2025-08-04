@@ -17,6 +17,18 @@ router.post('/', (req, res) => {
         return res.status(400).json({ error: 'User not found' });
     }
 
+    if (graphs.some(graph => graph.username === username && graph.name === name)) {
+        const index = graphs.findIndex(graph => graph.username === username && graph.name === name);
+        graphs[index] = {
+            ...graphs[index],
+            data,
+            directed: directed !== undefined ? directed : graphs[index].directed,
+            weighted: weighted !== undefined ? weighted : graphs[index].weighted
+        };
+        console.log(`Graph with name ${name} already exists. Updating the existing graph.`);
+        return res.status(200).json({ message: 'Graph updated successfully', graph: graphs[index] });
+    }
+
     const newGraph: Graph = {
         id: graphs.length + 1,
         username: user.username,
@@ -41,7 +53,7 @@ router.get('/', (req, res) => {
     return res.status(200).json(userGraphs);
 });
 
-router.post('/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     const id = parseInt(req.params.id);
     const index = graphs.findIndex(graph => graph.id === id);
 

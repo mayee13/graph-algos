@@ -15,9 +15,9 @@ function App() {
 
   return (
     <Router>
-      <Header username={username} setUsername={setUsername}/>
+      <Header username={username} setUsername={setUsername} setGraphName={setGraphName} setLoadedGraph={setLoadedGraph}/>
       <Routes>
-        <Route path="/" element={<Login user={username} setUser={setUsername}/>} />
+        <Route path="/" element={<Login setUser={setUsername}/>} />
         <Route path="/canvas" element={<MainLayout user={username} graph={graphName} setGraphName={setGraphName} graphInfo={loadedGraph} options={options} setOptions={setOptions}/>} />
         <Route path="/savedgraphs" element={<SavedGraphs username={username} setGraphName={setGraphName} setLoadedGraph={setLoadedGraph} setOptions={setOptions}/>} />
       </Routes>

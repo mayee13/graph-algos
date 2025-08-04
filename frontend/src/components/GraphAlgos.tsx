@@ -1,5 +1,5 @@
 import { useState } from "react";
-import './GraphAlgos.css';
+import './styles/GraphAlgos.css';
 
 export default function GraphAlgos({ 
     onBackClick,

@@ -21,7 +21,7 @@
     max-height: 350px; /* Limit height */
     overflow-y: auto; /* Scroll if overflow */
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     box-sizing: border-box;
     background-color: #f9f9f9;
     margin-bottom: 3rem; 
