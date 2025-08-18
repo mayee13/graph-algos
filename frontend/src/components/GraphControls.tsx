@@ -13,7 +13,8 @@ export default function GraphControls({
   graphName,
   setGraphName, 
   saveGraphToDB,
-  loadClick 
+  loadClick,
+  generateRandomGraph 
 }: { 
   onRunClick: () => void 
   setNodeCount: (count: number) => void;
@@ -26,6 +27,7 @@ export default function GraphControls({
   setGraphName: (name: string) => void;
   saveGraphToDB: () => void; 
   loadClick: () => void;
+  generateRandomGraph: () => void;
 }) {
     return (
         <div className="graph-controls-container">
@@ -33,7 +35,7 @@ export default function GraphControls({
           <CheckBoxElems options={options} setOptions={setOptions}/>
           <SliderElem setNodeCount={setNodeCount} nodeCount={nodes.length}/>
           <AddEdge addEdge={addEdge} nodes={nodes} options={options} setNegativeEdges={setNegativeEdges}/>
-          <BottomButtons onRunClick={onRunClick} saveGraphToDB={saveGraphToDB} loadClick={loadClick}/>
+          <BottomButtons onRunClick={onRunClick} saveGraphToDB={saveGraphToDB} loadClick={loadClick} generateRandomGraph={generateRandomGraph}/>
         </div>
       );
 }
@@ -151,12 +153,12 @@ function AddEdge({
 }
 
 // Render buttons for various actions
-function BottomButtons({ onRunClick, saveGraphToDB, loadClick }: { 
-  onRunClick: () => void, saveGraphToDB: () => void, loadClick: () => void }) {
+function BottomButtons({ onRunClick, saveGraphToDB, loadClick, generateRandomGraph }: { 
+  onRunClick: () => void, saveGraphToDB: () => void, loadClick: () => void, generateRandomGraph: () => void }) {
   return (
     <div>
       <div>
-        <button className="button-17">Generate</button>
+        <button className="button-17" onClick={generateRandomGraph}>Generate</button>
         <button className="button-17" onClick={onRunClick}>Run </button>
         <button className="button-17" onClick={saveGraphToDB}>Save</button>
         <button
@@ -164,7 +166,6 @@ function BottomButtons({ onRunClick, saveGraphToDB, loadClick }: {
         onClick={loadClick}
       >Load</button>
       </div>
-      {/* <div><button className="button-17" onClick={() => navigate('/')}>Back to Login</button></div> */}
     </div>
   )
 }

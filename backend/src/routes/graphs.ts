@@ -4,7 +4,6 @@ import { users } from '../data/users';
 import { Graph } from '../types/graph';
 
 const router = express.Router();
-
 router.post('/', (req, res) => {
     const { username, name, data, directed, weighted } = req.body;  
 
@@ -29,8 +28,10 @@ router.post('/', (req, res) => {
         return res.status(200).json({ message: 'Graph updated successfully', graph: graphs[index] });
     }
 
+    const maxId = graphs.reduce((max, g) => Math.max(max, typeof g.id === 'number' ? g.id : 0), 0);
+    const newId = maxId + 1;
     const newGraph: Graph = {
-        id: graphs.length + 1,
+        id: newId,
         username: user.username,
         name: name || `Graph ${graphs.length + 1}`,
         data,

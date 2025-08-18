@@ -173,6 +173,54 @@ export default function MainLayout({
     
   }
 
+  const generateRandomGraph = () => {
+    const degree = 2; // average degree per node (tweakable)
+    const nodeIds = nodes.map(node => node.id);
+
+    if (nodeIds.length <= 2) {
+      alert("Need at least 3 nodes to generate a random graph.");
+      return;
+    }
+
+    const edgeSet = new Set<string>();
+    const newLinks: Link[] = [];
+
+    // Ensure weak connectivity (like a spanning tree)
+    for (let i = 1; i < nodeIds.length; i++) {
+      const from = nodeIds[Math.floor(Math.random() * i)];
+      const to = nodeIds[i];
+      const [start, end] = options.directed ? [from, to] : [from, to].sort();
+      const key = `${start}-${end}`;
+      if (!edgeSet.has(key)) {
+        edgeSet.add(key);
+        const weight = options.weighted ? Math.floor(Math.random() * 10) + 1 : undefined;
+        newLinks.push({ source: start, target: end, weight });
+        if (weight !== undefined && weight < 0) setHasNegativeEdges(true);
+      }
+    }
+
+    // Add extra edges to meet average degree
+    const targetEdges = Math.floor((nodeIds.length * degree) / 2);
+    while (edgeSet.size < targetEdges) {
+      const from = nodeIds[Math.floor(Math.random() * nodeIds.length)];
+      const to = nodeIds[Math.floor(Math.random() * nodeIds.length)];
+      if (from === to) continue;
+      const [start, end] = options.directed ? [from, to] : [from, to].sort();
+      const key = `${start}-${end}`;
+      if (!edgeSet.has(key)) {
+        edgeSet.add(key);
+        const weight = options.weighted ? Math.floor(Math.random() * 10) + 1 : undefined;
+        newLinks.push({ source: start, target: end, weight });
+        if (weight !== undefined && weight < 0) setHasNegativeEdges(true);
+      }
+    }
+
+    // Reset visited visuals
+    setVisitedNodes([]);
+    setVisitedEdges([]);
+    setLinks(newLinks);
+  }
+
   return (
     <div>
       <div className="main-layout">
@@ -199,6 +247,7 @@ export default function MainLayout({
             setGraphName={setGraphName}
             saveGraphToDB={saveGraphToDB}
             loadClick={loadClick}
+            generateRandomGraph={generateRandomGraph}
             />
           )}
         </div>

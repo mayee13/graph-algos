@@ -50,19 +50,20 @@ setOptions: (options: { directed: boolean; weighted: boolean }) => void }) {
             // Reload graphs after deletion
             await loadGraphs();
             setSelectedGraphId(null);
-            setSelected(""); // reset selected graph name
+            setSelected(""); 
         } catch (err) {
             console.error('Failed to delete graph', err);
         }
     }
 
     function handleGraphClick(graph: BackendGraph) {
+        console.log(graph.id)
         if (selected === graph.name) {
-            setSelected(""); // reset selected graph name
-            setSelectedGraphId(null); // reset selected graph id
+            setSelected(""); 
+            setSelectedGraphId(null); 
         } else {
-            setSelected(graph.name); // set selected graph name
-            setSelectedGraphId(graph.id); // set selected graph id
+            setSelected(graph.name); 
+            setSelectedGraphId(graph.id); 
         }
     }
 
@@ -86,8 +87,8 @@ setOptions: (options: { directed: boolean; weighted: boolean }) => void }) {
                         </button>
                         {selectedGraphId === graph.id && (
                                 <div className='graph-action-buttons'>
-                                    <button className='button-17' onClick={() => handleOpen(graph)}>Open</button>
-                                    <button className='button-17 delete' onClick={() => handleDelete(graph)}>Delete</button>
+                                    <button className='button-13' onClick={() => handleOpen(graph)}>Open</button>
+                                    <button className='button-13' onClick={() => handleDelete(graph)}>Delete</button>
                                 </div>
                         )}
                     </li>
