@@ -3,12 +3,12 @@
 The purpose of this web application is to provide a tool for generating graphs and visualizing common graph algorithms. 
 
 ## How to Run this Application 
-- In the frontend directory, run:
+In the frontend directory, run:
 
 ### `npm start`
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-- In the backend directory, run:
+In the backend directory, run:
 
 ### `npm dev`
 
