@@ -8,6 +8,7 @@ In the frontend directory, run:
 ### `npm start`
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
 In the backend directory, run:
 
 ### `npm dev`
